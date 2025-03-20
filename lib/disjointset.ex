@@ -24,6 +24,7 @@ defmodule DisjointSet do
   """
   def find(set = %DisjointSet{forest: forest}, x) do
     parent = Map.get(forest, x)
+
     if parent != x do
       find(set, parent)
     else
@@ -40,9 +41,10 @@ defmodule DisjointSet do
     {root, %{set | forest: forest}}
   end
 
-  #Path compression: Updates all nodes on the path from `x` to `new_root` to all refer to `new_root` as their representative.
+  # Path compression: Updates all nodes on the path from `x` to `new_root` to all refer to `new_root` as their representative.
   defp compress(forest, x, new_root) do
     parent = Map.get(forest, x)
+
     if parent != new_root do
       compress(Map.put(forest, x, new_root), parent, new_root)
     else
@@ -64,11 +66,12 @@ defmodule DisjointSet do
       y_rank = Map.get(set.rank, y_root)
 
       # Swap so the taller tree will be the new root
-      {x_root, y_root} = if x_rank < y_rank do
-        {y_root, x_root}
-      else
-        {x_root, y_root}
-      end
+      {x_root, y_root} =
+        if x_rank < y_rank do
+          {y_root, x_root}
+        else
+          {x_root, y_root}
+        end
 
       # Set x to be the new root
       forest = Map.put(set.forest, y_root, x_root)
@@ -78,11 +81,12 @@ defmodule DisjointSet do
       forest = compress(forest, y, x_root)
 
       # Update upper bounds of new root
-      rank = if x_rank == y_rank do
-        Map.put(set.rank, x_root, x_rank+1)
-      else
-        set.rank
-      end
+      rank =
+        if x_rank == y_rank do
+          Map.put(set.rank, x_root, x_rank + 1)
+        else
+          set.rank
+        end
 
       %{set | forest: forest, rank: rank}
     end

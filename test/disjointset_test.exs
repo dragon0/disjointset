@@ -72,5 +72,4 @@ defmodule DisjointSetTest do
     assert one_root != seven_root
     assert three_root != seven_root
   end
-
 end
