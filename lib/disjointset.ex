@@ -60,6 +60,9 @@ defmodule DisjointSet do
     y_root = find(set, y)
 
     if x_root == y_root do
+      #TODO Could do path compression on x_root and y_root
+      # need to evaluate the trade-offs of returning the unchanged set
+      # vs always mutating the set even if `union` does nothing
       set
     else
       x_rank = Map.get(set.rank, x_root)
